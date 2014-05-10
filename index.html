@@ -1,0 +1,103 @@
+<!DOCTYPE>
+<html lang="ja">
+<head>
+<meta hcarset="UTF-8">
+<script src="js/poteto.js"></script>
+<script src="js/jquery.js"></script>
+<link rel="stylesheet" href="css/main.css"> 
+<title>神経衰弱</title>
+</head>
+<body>
+
+<header>
+<div class="top">
+<h1><span>-</span>神経衰弱</h1>
+</div>
+</header>
+
+<!-- 音声ファイルを設定 S -->
+<audio id="sound1"><source src="audio/sound1.wav" type="audio/wav"></audio>
+<audio id="sound2"><source src="audio/sound2.wav" type="audio/wav"></audio>
+<audio id="sound3"><source src="audio/sound3.wav" type="audio/wav"></audio>
+<audio id="sound4"><source src="audio/sound4.wav" type="audio/wav"></audio>
+<audio id="sound5"><source src="audio/sound5.wav" type="audio/wav"></audio>
+<audio id="sound6"><source src="audio/sound6.wav" type="audio/wav"></audio>
+<!-- 音声ファイルを設定 E -->
+
+<!-- 神経衰弱のメインフィールド S -->
+<div class="main">
+<script>
+var btnvalue = new Array(1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6)
+btnvalue = arrayShuffle(btnvalue);
+
+document.write('<table id="gfield">');
+for (var i=0; i<=2; i++) {
+	document.write('<tr>');
+	for (var j=0; j<=3; j++) {
+		document.write('<td>');
+		document.write('<input class="gbtn" type="button" id=' + btnvalue[i*4+j] + '>');
+		document.write('</td>');
+	}
+	document.write('</tr>');
+}
+document.write('</table>');
+</script>
+</div>
+<!-- 神経衰弱のメインフィールド E -->
+
+<!-- メイン処理 S -->
+<script>
+var firstClickFlg = true;	//一枚目と二枚目の判別用
+var firstBtnId;				//１個目のボタンのIdを確保
+var set = 0;				//できたペアを集計
+var reverseFlg = false;		//reverseDelayの終了フラグ
+
+/* ボタンを押した時のイベント */
+$('#gfield input').bind('click', function() {
+	if(reverseFlg) return;
+	
+	$(this).attr({'disabled':"disabled",'value':$(this).attr('id')});
+	
+	for(var i=1; i<=6; i++) {
+		var stopSound = document.getElementById("sound" + i);
+		stopSound.pause();
+	}
+	var btnSound = document.getElementById("sound" + $(this).attr('id'));	//音声ファイルを設定
+	btnSound.currentTime = 0;
+	btnSound.play();
+	
+	if(firstClickFlg) {
+		/* 一回目の選択 */
+		firstBtnId = $(this).attr('id');
+		firstClickFlg = false;
+	} else {
+		/* 二回目の選択 */
+		if(firstBtnId===$(this).attr('id')) {
+			/* idが一致した場合 */
+			$('input[id=' + firstBtnId + ']').css({'background-color':"#fff",'color':"#59b1eb"});
+			set++;
+		} else {
+			/* idが一致しなかった場合 */
+			reverseFlg = true;
+			setTimeout("reverseDelay(firstBtnId," + $(this).attr('id') + ")",2000);
+		}
+		firstClickFlg = true;
+	}
+	if(set===6) {
+		var ans = confirm('終了\nもう一回？');
+		if(ans) {
+			location.reload();
+		}
+	}
+});
+
+/* 一致しなかった時の処理を遅らせる */
+function reverseDelay(fId, sId) {
+	$('input[id=' + fId + ']').removeAttr('disabled value');
+	$('input[id=' + sId + ']').removeAttr('disabled value');
+	reverseFlg = false;
+}
+</script>
+<!-- メイン処理 E -->
+</body>
+</html>
