@@ -1,30 +1,30 @@
 <!DOCTYPE>
 <html lang="ja">
 <head>
-<meta hcarset="UTF-8">
+<meta charset="UTF-8">
 <script src="js/poteto.js"></script>
 <script src="js/jquery.js"></script>
 <link rel="stylesheet" href="css/main.css"> 
-<title>_ŒoŠã</title>
+<title>ç¥çµŒè¡°å¼±</title>
 </head>
 <body>
 
 <header>
 <div class="top">
-<h1><span>-</span>_ŒoŠã</h1>
+<h1><span>-</span>ç¥çµŒè¡°å¼±</h1>
 </div>
 </header>
 
-<!-- ‰¹ºƒtƒ@ƒCƒ‹‚ğİ’è S -->
+<!-- éŸ³å£°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¨­å®š S -->
 <audio id="sound1"><source src="audio/sound1.wav" type="audio/wav"></audio>
 <audio id="sound2"><source src="audio/sound2.wav" type="audio/wav"></audio>
 <audio id="sound3"><source src="audio/sound3.wav" type="audio/wav"></audio>
 <audio id="sound4"><source src="audio/sound4.wav" type="audio/wav"></audio>
 <audio id="sound5"><source src="audio/sound5.wav" type="audio/wav"></audio>
 <audio id="sound6"><source src="audio/sound6.wav" type="audio/wav"></audio>
-<!-- ‰¹ºƒtƒ@ƒCƒ‹‚ğİ’è E -->
+<!-- éŸ³å£°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¨­å®š E -->
 
-<!-- _ŒoŠã‚ÌƒƒCƒ“ƒtƒB[ƒ‹ƒh S -->
+<!-- ç¥çµŒè¡°å¼±ã®ãƒ¡ã‚¤ãƒ³ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ S -->
 <div class="main">
 <script>
 var btnvalue = new Array(1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6)
@@ -43,16 +43,16 @@ for (var i=0; i<=2; i++) {
 document.write('</table>');
 </script>
 </div>
-<!-- _ŒoŠã‚ÌƒƒCƒ“ƒtƒB[ƒ‹ƒh E -->
+<!-- ç¥çµŒè¡°å¼±ã®ãƒ¡ã‚¤ãƒ³ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ E -->
 
-<!-- ƒƒCƒ“ˆ— S -->
+<!-- ãƒ¡ã‚¤ãƒ³å‡¦ç† S -->
 <script>
-var firstClickFlg = true;	//ˆê–‡–Ú‚Æ“ñ–‡–Ú‚Ì”»•Ê—p
-var firstBtnId;				//‚PŒÂ–Ú‚Ìƒ{ƒ^ƒ“‚ÌId‚ğŠm•Û
-var set = 0;				//‚Å‚«‚½ƒyƒA‚ğWŒv
-var reverseFlg = false;		//reverseDelay‚ÌI—¹ƒtƒ‰ƒO
+var firstClickFlg = true;	//ä¸€æšç›®ã¨äºŒæšç›®ã®åˆ¤åˆ¥ç”¨
+var firstBtnId;				//ï¼‘å€‹ç›®ã®ãƒœã‚¿ãƒ³ã®Idã‚’ç¢ºä¿
+var set = 0;				//ã§ããŸãƒšã‚¢ã‚’é›†è¨ˆ
+var reverseFlg = false;		//reverseDelayã®çµ‚äº†ãƒ•ãƒ©ã‚°
 
-/* ƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½‚ÌƒCƒxƒ“ƒg */
+/* ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ãŸæ™‚ã®ã‚¤ãƒ™ãƒ³ãƒˆ */
 $('#gfield input').bind('click', function() {
 	if(reverseFlg) return;
 	
@@ -62,42 +62,42 @@ $('#gfield input').bind('click', function() {
 		var stopSound = document.getElementById("sound" + i);
 		stopSound.pause();
 	}
-	var btnSound = document.getElementById("sound" + $(this).attr('id'));	//‰¹ºƒtƒ@ƒCƒ‹‚ğİ’è
+	var btnSound = document.getElementById("sound" + $(this).attr('id'));	//éŸ³å£°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¨­å®š
 	btnSound.currentTime = 0;
 	btnSound.play();
 	
 	if(firstClickFlg) {
-		/* ˆê‰ñ–Ú‚Ì‘I‘ğ */
+		/* ä¸€å›ç›®ã®é¸æŠ */
 		firstBtnId = $(this).attr('id');
 		firstClickFlg = false;
 	} else {
-		/* “ñ‰ñ–Ú‚Ì‘I‘ğ */
+		/* äºŒå›ç›®ã®é¸æŠ */
 		if(firstBtnId===$(this).attr('id')) {
-			/* id‚ªˆê’v‚µ‚½ê‡ */
+			/* idãŒä¸€è‡´ã—ãŸå ´åˆ */
 			$('input[id=' + firstBtnId + ']').css({'background-color':"#fff",'color':"#59b1eb"});
 			set++;
 		} else {
-			/* id‚ªˆê’v‚µ‚È‚©‚Á‚½ê‡ */
+			/* idãŒä¸€è‡´ã—ãªã‹ã£ãŸå ´åˆ */
 			reverseFlg = true;
 			setTimeout("reverseDelay(firstBtnId," + $(this).attr('id') + ")",2000);
 		}
 		firstClickFlg = true;
 	}
 	if(set===6) {
-		var ans = confirm('I—¹\n‚à‚¤ˆê‰ñH');
+		var ans = confirm('çµ‚äº†\nã‚‚ã†ä¸€å›ï¼Ÿ');
 		if(ans) {
 			location.reload();
 		}
 	}
 });
 
-/* ˆê’v‚µ‚È‚©‚Á‚½‚Ìˆ—‚ğ’x‚ç‚¹‚é */
+/* ä¸€è‡´ã—ãªã‹ã£ãŸæ™‚ã®å‡¦ç†ã‚’é…ã‚‰ã›ã‚‹ */
 function reverseDelay(fId, sId) {
 	$('input[id=' + fId + ']').removeAttr('disabled value');
 	$('input[id=' + sId + ']').removeAttr('disabled value');
 	reverseFlg = false;
 }
 </script>
-<!-- ƒƒCƒ“ˆ— E -->
+<!-- ãƒ¡ã‚¤ãƒ³å‡¦ç† E -->
 </body>
 </html>
