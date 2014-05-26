@@ -10,20 +10,23 @@ window.onload = function() {
 		scene.backgroundColor = "black";
 		var sprite = new Sprite(core.width, core.height);
 		var surface = new Surface(core.width, core.height);
-
+		
+		//火花のクラス作成
 		var Hibana = Class.create(Sprite, {
 			initialize: function(x, y, vx, vy) {
 				Sprite.call(this, core.width, core.height);
 				surface.clear();
-				this.x = x;
-				this.y = y;
+				this.x = x;	//初期表示位置X軸
+				this.y = y;	//初期表示位置Y軸
 				
+				//塗りつぶし円
 				surface.context.beginPath();
 				surface.context.fillStyle = "#f5f";
 				surface.context.arc(this.x, this.y, 3, 0, Math.PI*2);
 				surface.context.fill();
 				this.image = surface;
 				
+				//vx: 移動距離X軸 vY: 移動距離Y軸
 				this.tl.moveBy(vx, vy, 30)
 					.fadeOut(10);
 				
@@ -31,6 +34,7 @@ window.onload = function() {
 			}
 		});
 		
+		//4方向に10個ずつ火花を放射
 		var Hanabi = Class.create({
 			initialize: function(x, y){
 				new Hibana(x, y, rand(50), rand(50));
@@ -39,7 +43,8 @@ window.onload = function() {
 				new Hibana(x, y, -rand(50), -rand(50));
 			}
 		});
-
+		
+		//画面クリックで花火っぽいものを生成
 		core.rootScene.on('touchstart', function(e) {
 			var hanabi = [];
 			for(var i = 0; i < 10; i++){
