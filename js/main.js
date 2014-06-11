@@ -1,4 +1,4 @@
-﻿enchant();
+enchant();
 
 //--------------------画像情報-----------------------------
 const BTN_FRONT_IMG = "img/cardFront.png";  // ボタン表画像
@@ -16,6 +16,9 @@ const BTN_ROW    = 3;     // 縦に配置する数
 //--------------------ステージ情報-----------------------------
 var btnList;                                                   //画面のボタンのリスト
 var btnvalue = new Array(1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6)   //画面のボタンID
+var firstClickFlg = true;                                      //音一致判定用フラグ1
+var firstClickBtn;                                             //音一致判定用フラグ2
+var firstBtnId = 0;                                            //音一致判定用フラグ3
 btnvalue = arrayShuffle(btnvalue);
 
 window.onload = function(){
@@ -60,6 +63,7 @@ GameStartScene = enchant.Class.create(enchant.Scene, {
               createButton(this, x, y);
           }
       }
+      
 
   }
 });
@@ -68,16 +72,43 @@ GameStartScene = enchant.Class.create(enchant.Scene, {
 //ボタン作成
 function createButton(stage, x ,y){
   var btn = new Sprite(BTN_WIDTH,BTN_HEIGHT);   // ボタン画像サイズ指定
-  btn.image = core.assets[BTN_FRONT_IMG];            // ボタン画像設定
+  btn.image = core.assets[BTN_BACK_IMG];            // ボタン画像設定
   var btnId = btnvalue[y * 4 + x];
   btn.x     = (BTN_WIDTH * x) + (45 * (x + 1));
   btn.y     = (BTN_HEIGHT * y) + (48 * (y + 1));
   stage.addChild(btn);
   btnList[x + y * BTN_COL] = btn;
   btn.addEventListener(Event.TOUCH_START, function(e) {
-    alert("ボタンが押されました。 id=" + btnId);
+  //音一致判定
+   console.log("ボタンが押されました。 id=" + btnId);
+      if (firstClickFlg == true) {
+          firstClickBtn = btn;
+          firstBtnId = btnId;
+          btn.image = core.assets[BTN_FRONT_IMG];
+          
+      }else{
+         
+          btn.image = core.assets[BTN_FRONT_IMG];
+      }
+  });
+  btn.addEventListener(Event.TOUCH_END, function(e) {
+      if (firstClickFlg == true) {
+          firstClickFlg = false;
+      }else if (firstBtnId == btnId){
+          alert("判定");
+          firstClickFlg = true;
+      }else{
+          btn.image = core.assets[BTN_FRONT_IMG]; 
+          alert("判定");
+          firstClickFlg = true;
+          firstClickBtn.image = core.assets[BTN_BACK_IMG];
+          btn.image = core.assets[BTN_BACK_IMG];
+      }
   });
 }
+
+
+
 
 //配列シャッフル
 function arrayShuffle(list) {
