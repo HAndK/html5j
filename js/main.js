@@ -21,11 +21,12 @@ const BTN_ROW    = 3;     // 縦に配置する数
 var btnList;                                                   //画面のボタンのリスト
 var btnvalue = new Array(1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6)   //画面のボタンID
 btnvalue = arrayShuffle(btnvalue);
+var btnSound = null;
 
 window.onload = function(){
   core = new Core(CORE_WIDTH, CORE_HEIGHT);
   core.fps = 15;
-  core.preload(BTN_FRONT_IMG, BTN_BACK_IMG, BACKGROUND_IMG, BEAR_IMG);
+  core.preload(BTN_FRONT_IMG, BTN_BACK_IMG, BACKGROUND_IMG, BEAR_IMG, "audio/sound1.mp3", "audio/sound2.mp3", "audio/sound3.mp3", "audio/sound4.mp3", "audio/sound5.mp3", "audio/sound6.mp3");
 
   core.onload = function(){
       var startScene = new GameStartScene();
@@ -112,7 +113,11 @@ function createButton(stage, x ,y){
   stage.addChild(btn);
   btnList[x + y * BTN_COL] = btn;
   btn.addEventListener(Event.TOUCH_START, function(e) {
-    alert("ボタンが押されました。 id=" + btnId);
+    if( btnSound ) {
+		btnSound.stop();
+	}
+	btnSound = core.assets["audio/sound" + btnId + ".mp3"].clone();	//音声ファイルを設定
+	btnSound.play();
   });
 }
 
