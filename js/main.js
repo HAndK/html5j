@@ -1,4 +1,4 @@
-﻿enchant();
+enchant();
 
 //--------------------画像情報-----------------------------
 const BTN_FRONT_IMG = "img/cardFront.png";  // ボタン表画像
@@ -21,6 +21,12 @@ const BTN_ROW    = 3;     // 縦に配置する数
 //--------------------ステージ情報-----------------------------
 var btnList;         //画面のボタンのリスト
 var btnvalue = [];   //画面のボタンID
+var firstClickFlg = true; //音一致判定用フラグ1
+var firstClickBtn; //音一致判定用フラグ2
+var firstBtnId = 0; //音一致判定用フラグ3
+var reverseFlg = false; //音一致判定用フラグ4
+var reverseCnt = 0; //クリア判定用カウンタ
+var clearFlg = false //クリア判定用フラグ
 btnvalue = createRandomArray(SOUNT_NUM);
 btnvalue = arrayShuffle(btnvalue);
 var btnSound = null;
@@ -116,11 +122,53 @@ function createButton(stage, x ,y){
   stage.addChild(btn);
   btnList[x + y * BTN_COL] = btn;
   btn.addEventListener(Event.TOUCH_START, function(e) {
+    //表なら関数を抜ける
+    if (btn.image == core.assets[BTN_FRONT_IMG]){
+        reverseFlg = true;
+        return;
+    } 
+    //音
     if( btnSound ) {
-        btnSound.stop();
+		btnSound.stop();
+	}
+	btnSound = core.assets["audio/sound" + btnId + ".mp3"].clone();	//音声ファイルを設定
+	btnSound.play();
+    //一致判定
+
+    if (firstClickFlg == true) {
+        firstClickBtn = btn;
+        firstBtnId = btnId;
+        btn.image = core.assets[BTN_FRONT_IMG];
+          
+    }else{
+         
+        btn.image = core.assets[BTN_FRONT_IMG];
     }
-    btnSound = core.assets["audio/sound" + btnId + ".mp3"].clone(); //音声ファイルを設定
-    btnSound.play();
+  });
+  btn.addEventListener(Event.TOUCH_END, function(e) {
+    //表なら関数を抜ける
+    if (reverseFlg == true){
+        reverseFlg = false;
+        return;
+    } 
+    if (firstClickFlg == true) {
+       firstClickFlg = false;
+    }else if (firstBtnId == btnId){
+       sleep(2000);  
+       firstClickFlg = true;
+       reverseCnt = ++reverseCnt;
+        console.log (reverseCnt);
+          if (reverseCnt == 6){
+              clearFlg = true;
+              alert("Clear");
+          }
+    }else{
+       btn.image = core.assets[BTN_FRONT_IMG];
+       sleep(2000);
+       firstClickFlg = true;
+       firstClickBtn.image = core.assets[BTN_BACK_IMG];
+       btn.image = core.assets[BTN_BACK_IMG];
+    }
   });
 }
 
@@ -165,4 +213,14 @@ function createRandomArray(soundNum) {
     }
     var arr2 = arr.concat();
     return arr.concat(arr2);
+}
+
+//スリープ
+function sleep(time) {
+  var d1 = new Date().getTime();
+  var d2 = new Date().getTime();
+  while (d2 < d1 + time) {
+    d2 = new Date().getTime();
+  }
+  return;
 }
