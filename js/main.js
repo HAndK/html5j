@@ -4,29 +4,32 @@
 const BTN_FRONT_IMG = "img/cardFront.png";  // ボタン表画像
 const BTN_BACK_IMG = "img/cardBack.png";    // ボタン裏画像
 const BACKGROUND_IMG  = "img/mainBack.png"; // 背景画像
-const BEAR_IMG = "img/bear.png";        // クマ画像
+const BEAR_IMG = "img/bear.png";            // クマ画像
 
 //--------------------定数-----------------------------
 const CORE_WIDTH = 640;   // 画面横サイズ
 const CORE_HEIGHT = 480;  // 画面縦サイズ
 const BTN_WIDTH   = 100;  // ボタン画像横サイズ
 const BTN_HEIGHT  = 100;  // ボタン画像縦サイズ
-const BEAR_WIDTH = 32;
-const BEAR_HEIGHT = 32;
+const BEAR_WIDTH = 32;    // クマの画像横サイズ
+const BEAR_HEIGHT = 32;   // クマの画像縦サイズ
+const SOUNT_NUM = 12;     // 音源の数
 
 const BTN_COL    = 4;     // 横に配置する数
 const BTN_ROW    = 3;     // 縦に配置する数
 
 //--------------------ステージ情報-----------------------------
-var btnList;                                                   //画面のボタンのリスト
-var btnvalue = new Array(1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6)   //画面のボタンID
+var btnList;         //画面のボタンのリスト
+var btnvalue = [];   //画面のボタンID
+btnvalue = createRandomArray(SOUNT_NUM);
 btnvalue = arrayShuffle(btnvalue);
 var btnSound = null;
 
 window.onload = function(){
   core = new Core(CORE_WIDTH, CORE_HEIGHT);
   core.fps = 15;
-  core.preload(BTN_FRONT_IMG, BTN_BACK_IMG, BACKGROUND_IMG, BEAR_IMG, "audio/sound1.mp3", "audio/sound2.mp3", "audio/sound3.mp3", "audio/sound4.mp3", "audio/sound5.mp3", "audio/sound6.mp3");
+  core.preload(BTN_FRONT_IMG, BTN_BACK_IMG, BACKGROUND_IMG, BEAR_IMG, "audio/sound1.mp3", "audio/sound2.mp3", "audio/sound3.mp3", "audio/sound4.mp3", "audio/sound5.mp3", "audio/sound6.mp3",
+               "audio/sound7.mp3", "audio/sound8.mp3", "audio/sound9.mp3", "audio/sound10.mp3", "audio/sound11.mp3", "audio/sound12.mp3");
 
   core.onload = function(){
       var startScene = new GameStartScene();
@@ -114,10 +117,10 @@ function createButton(stage, x ,y){
   btnList[x + y * BTN_COL] = btn;
   btn.addEventListener(Event.TOUCH_START, function(e) {
     if( btnSound ) {
-		btnSound.stop();
-	}
-	btnSound = core.assets["audio/sound" + btnId + ".mp3"].clone();	//音声ファイルを設定
-	btnSound.play();
+        btnSound.stop();
+    }
+    btnSound = core.assets["audio/sound" + btnId + ".mp3"].clone(); //音声ファイルを設定
+    btnSound.play();
   });
 }
 
@@ -149,4 +152,17 @@ function arrayShuffle(list) {
         list[c] = d;
     }
     return list;
+}
+
+//配列作成
+function createRandomArray(soundNum) {
+    var arr = [];
+    for(var i=0; i < (soundNum / 2); i++) { 
+        do {
+            var randNum = Math.floor(Math.random() * soundNum) + 1; 
+        } while(arr.indexOf(randNum) != -1)
+        arr[i] = randNum;
+    }
+    var arr2 = arr.concat();
+    return arr.concat(arr2);
 }
