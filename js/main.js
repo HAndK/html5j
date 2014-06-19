@@ -154,6 +154,10 @@ function createButton(stage, x ,y){
     } 
     if (firstClickFlg == true) {
        firstClickFlg = false;
+       //カードの動き
+       this.tl.rotateTo(15, 5).and().scaleTo(1.2, 5)
+       .rotateTo(-15, 5).rotateTo(15, 5).rotateTo(-15, 5)
+       .rotateTo(0, 5).and().scaleTo(1, 5);
     }else if (firstBtnId == btnId){
        firstClickFlg = true;
        checkFlg = true;
@@ -162,7 +166,13 @@ function createButton(stage, x ,y){
               clearFlg = true;
               alert("Clear");
        }
-       this.tl.delay(30)
+       //そろった時のカードの動き
+       firstClickBtn.tl.clear()
+              .rotateTo(360, 10).and().scaleTo(1.2, 5)
+              .rotateTo(-360, 10).and().scaleTo(1, 5);
+       this.tl.clear()
+              .rotateTo(360, 10).and().scaleTo(1.2, 5)
+              .rotateTo(-360, 10).and().scaleTo(1, 5)
               .then(function(){
                                  btnSound.stop();
                                  checkFlg = false;
@@ -170,7 +180,10 @@ function createButton(stage, x ,y){
     }else{
        firstClickFlg = true;
        checkFlg = true;
-       this.tl.delay(30)
+       //カードの動き
+       this.tl.rotateTo(15, 5).and().scaleTo(1.2, 5)
+              .rotateTo(-15, 5).rotateTo(15, 5).rotateTo(-15, 5)
+              .rotateTo(0, 5).and().scaleTo(1, 5)
               .then(function(){
                                  firstClickBtn.image = core.assets[BTN_BACK_IMG];
                                  btn.image = core.assets[BTN_BACK_IMG];
