@@ -26,7 +26,6 @@ var firstClickBtn = null; // 一つ目に押下されたボタン
 var firstBtnId = 0;       // 一つ目に押下されたボタンID
 var reverseFlg = false;   // 画像表裏判定フラグ(true:表/false:裏)
 var matchCnt = 0;         // 一致画像カウンタ
-var clearFlg = false      // クリア判定用フラグ
 var checkFlg = false      // 排他用フラグ
 btnvalue = createRandomArray(SOUNT_NUM);
 btnvalue = arrayShuffle(btnvalue);
@@ -35,7 +34,7 @@ var btnSound = null;
 window.onload = function(){
   core = new Core(CORE_WIDTH, CORE_HEIGHT);
   core.fps = 15;
-  core.preload(BTN_FRONT_IMG, BTN_BACK_IMG, BACKGROUND_IMG, BEAR_IMG, "audio/sound1.mp3", "audio/sound2.mp3", "audio/sound3.mp3", "audio/sound4.mp3", "audio/sound5.mp3", "audio/sound6.mp3",
+  core.preload(BTN_FRONT_IMG, BTN_BACK_IMG, BACKGROUND_IMG, BEAR_IMG, "audio/hanabi.mp3", "audio/sound1.mp3", "audio/sound2.mp3", "audio/sound3.mp3", "audio/sound4.mp3", "audio/sound5.mp3", "audio/sound6.mp3",
                "audio/sound7.mp3", "audio/sound8.mp3", "audio/sound9.mp3", "audio/sound10.mp3", "audio/sound11.mp3", "audio/sound12.mp3");
 
   core.onload = function(){
@@ -50,25 +49,26 @@ GameStartScene = enchant.Class.create(enchant.Scene, {
   initialize: function () {
       Scene.call(this);
 
-      //背景の生成
+      /* 背景の生成 */
       var backGround = new Sprite(CORE_WIDTH, CORE_HEIGHT);
       backGround.image = core.assets[BACKGROUND_IMG];
       this.addChild(backGround);
       
-      //タイトルの生成
+      /* タイトルの生成 */
       var title = new Label('音合わせ');
       title.x = 10;
       title.y = 5;
       title.font = "bold 20px メイリオ";
       this.addChild(title);
-      // サブタイトルラベル設定
+      
+      /* サブタイトルラベル設定 */
       var subTitle = new Label('～音で合わせる神経衰弱～'); 
       subTitle.x = 100;
       subTitle.y = 10;
       subTitle.font = '16px メイリオ';
       this.addChild(subTitle)
 
-      //ボタンを生成して並べる
+      /* ボタンを生成して並べる */
       btnList = new Array();
       for(var y = 0; y < BTN_ROW; y++){
           for(var x = 0; x < BTN_COL; x++){
@@ -76,7 +76,7 @@ GameStartScene = enchant.Class.create(enchant.Scene, {
           }
       }
 
-      //クマを生成
+      /* クマを生成 */
       var bear = new Sprite(BEAR_WIDTH, BEAR_HEIGHT);
       bear.image = core.assets['img/bear.png'];
       bear.x = 0;
@@ -113,7 +113,13 @@ GameStartScene = enchant.Class.create(enchant.Scene, {
 });
 
 
-//ボタン作成
+/**
+ *  ボタンを任意の位置に配置します
+ *  引数 stage  : ボタンを追加するシーン
+ *       x      : 現在のX座標
+ *       y      : 現在のY座標
+ *  戻り値      : なし
+ */
 function createButton(stage, x ,y){
   var btn = new Sprite(BTN_WIDTH,BTN_HEIGHT);   // ボタン画像サイズ指定
   btn.image = core.assets[BTN_BACK_IMG];            // ボタン画像設定
@@ -163,8 +169,11 @@ function createButton(stage, x ,y){
        checkFlg = true;
        matchCnt += 1;
        if (matchCnt == 6){
-              clearFlg = true;
-              alert("Clear");
+           btnSound.stop();
+           checkFlg = false;
+           matchCnt = 0;
+           var endingScene = new GameEndingScene();
+           core.pushScene(endingScene);
        }
        //そろった時のカードの動き
        firstClickBtn.tl.clear()
@@ -210,7 +219,11 @@ function getMoveBearX(x, direct){
     return retX;
 }
 
-//配列シャッフル
+/**
+ *  配列の要素をランダムに並び替えて返却します
+ *  引数 list   : 並べ替える対象の配列
+ *  戻り値 list : 並び替えた配列
+ */
 function arrayShuffle(list) {
     var d, c
     var b = list.length;
@@ -235,4 +248,37 @@ function createRandomArray(soundNum) {
     }
     var arr2 = arr.concat();
     return arr.concat(arr2);
+}
+
+/**
+ *  シーンを最前面に表示します
+ *  引数 scene  : 最前面に表示するシーン
+ *  戻り値      : なし
+ *  備考        : シーンのスタック内に同じシーンが
+ :                Pushされないようにスタックを積み直します
+ */
+Core.prototype.forwardScene = function(scene){
+    /* 変更前のシーンスタックをコピー */
+    var beforeScenes = Core.instance._scenes.clone();
+    /* rootScene以外のシーンをすべてスタックから取り出す */
+    while( this.currentScene != this.rootScene ){
+        this.popScene();
+    }
+    /* 手前に表示したいシーン以外を元通りスタックに入れていく */
+    for( var i = 0; i < beforeScenes.length; i++ ){
+        if( beforeScenes[i] != scene && beforeScenes[i] != this.rootScene ){
+            this.pushScene( beforeScenes[i] );
+        }
+    }
+    /* 最後に手前に表示したいシーンをスタックに入れる */
+    this.pushScene(scene);
+    return;
+}
+
+//配列をコピー
+Array.prototype.clone = function(){
+    var arr = new Array();
+    for( var i = 0; i< this.length; i++ )
+        arr[i] = this[i];
+    return arr;
 }
