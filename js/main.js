@@ -27,6 +27,7 @@ var firstBtnId = 0;       // 一つ目に押下されたボタンID
 var reverseFlg = false;   // 画像表裏判定フラグ(true:表/false:裏)
 var matchCnt = 0;         // 一致画像カウンタ
 var clearFlg = false      // クリア判定用フラグ
+var checkFlg = false      // 排他用フラグ
 btnvalue = createRandomArray(SOUNT_NUM);
 btnvalue = arrayShuffle(btnvalue);
 var btnSound = null;
@@ -122,6 +123,8 @@ function createButton(stage, x ,y){
   stage.addChild(btn);
   btnList[x + y * BTN_COL] = btn;
   btn.addEventListener(Event.TOUCH_START, function(e) {
+    //２枚めくって３０フレームの間排他
+    if (checkFlg == true) return;
     //表なら関数を抜ける
     if (btn.image == core.assets[BTN_FRONT_IMG]){
         reverseFlg = true;
@@ -141,6 +144,9 @@ function createButton(stage, x ,y){
     }
   });
   btn.addEventListener(Event.TOUCH_END, function(e) {
+    //２枚めくって３０フレームの間排他
+    if (checkFlg == true) return;
+
     //表なら関数を抜ける
     if (reverseFlg == true){
         reverseFlg = false;
@@ -148,26 +154,41 @@ function createButton(stage, x ,y){
     } 
     if (firstClickFlg == true) {
        firstClickFlg = false;
+       //カードの動き
+       this.tl.rotateTo(15, 5).and().scaleTo(1.2, 5)
+       .rotateTo(-15, 5).rotateTo(15, 5).rotateTo(-15, 5)
+       .rotateTo(0, 5).and().scaleTo(1, 5);
     }else if (firstBtnId == btnId){
        firstClickFlg = true;
+       checkFlg = true;
        matchCnt += 1;
        if (matchCnt == 6){
               clearFlg = true;
               alert("Clear");
        }
-       this.tl.delay(30)
+       //そろった時のカードの動き
+       firstClickBtn.tl.clear()
+              .rotateTo(360, 10).and().scaleTo(1.2, 5)
+              .rotateTo(-360, 10).and().scaleTo(1, 5);
+       this.tl.clear()
+              .rotateTo(360, 10).and().scaleTo(1.2, 5)
+              .rotateTo(-360, 10).and().scaleTo(1, 5)
               .then(function(){
                                  btnSound.stop();
+                                 checkFlg = false;
                                });  
     }else{
-       btn.image = core.assets[BTN_FRONT_IMG];
-       
        firstClickFlg = true;
-       this.tl.delay(30)
+       checkFlg = true;
+       //カードの動き
+       this.tl.rotateTo(15, 5).and().scaleTo(1.2, 5)
+              .rotateTo(-15, 5).rotateTo(15, 5).rotateTo(-15, 5)
+              .rotateTo(0, 5).and().scaleTo(1, 5)
               .then(function(){
                                  firstClickBtn.image = core.assets[BTN_BACK_IMG];
                                  btn.image = core.assets[BTN_BACK_IMG];
                                  btnSound.stop();
+                                 checkFlg = false;
                                });
     }
   });
