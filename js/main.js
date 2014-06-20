@@ -3,7 +3,7 @@ enchant();
 //--------------------画像情報-----------------------------
 const BTN_FRONT_IMG = "img/cardFront.png";  // ボタン表画像
 const BTN_BACK_IMG = "img/cardBack.png";    // ボタン裏画像
-const BACKGROUND_IMG  = "img/mainBack.png"; // 背景画像
+const BACKGROUND_IMG  = "img/mainBg.png"; // 背景画像
 const BEAR_IMG = "img/bear.png";            // クマ画像
 
 //--------------------定数-----------------------------
