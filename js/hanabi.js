@@ -7,7 +7,7 @@ GameEndingScene = enchant.Class.create(enchant.Scene, {
       
       var scene = this;
       // 背景色の変更
-      scene.backgroundColor = "rgba(0, 0, 0, 0.5)";
+      scene.backgroundColor = "black";
       
       /* タイトルの生成 */
       var title = new Label('おめでとう');
@@ -37,14 +37,15 @@ GameEndingScene = enchant.Class.create(enchant.Scene, {
         var confirmScene = new ConfirmScene('もう一度あそぶ？', 'はい', 'いいえ');
         /* 「はい」ボタン押下時の処理 */
         confirmScene.onaccept = function() {
+            scene.backgroundColor = "white";
             /* ゲーム画面を再起動する */
             var startScene = new GameStartScene();
             core.forwardScene(startScene);
         };
         confirmScene.oncancel = function() {
-            /* ゲーム画面を再起動する */
-            var startScene = new GameEndingScene();
-            core.replaceScene(startScene);
+            /* 花火画面を再起動する */
+            var endingScene = new GameEndingScene();
+            core.forwardScene(endingScene);
         };
         core.pushScene(confirmScene);
       });
