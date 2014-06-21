@@ -49,11 +49,15 @@ GameStartScene = enchant.Class.create(enchant.Scene, {
   initialize: function () {
       Scene.call(this);
 
+      /* TODO ここにタイトルバーを生成して画面に追加 */
+
       /* 背景の生成 */
       var backGround = new Sprite(CORE_WIDTH, CORE_HEIGHT);
       backGround.image = core.assets[BACKGROUND_IMG];
+      backGround.y = 30;
       this.addChild(backGround);
       
+      /* TODO タイトルバーを生成したら 削除 start */
       /* タイトルの生成 */
       var title = new Label('音合わせ');
       title.x = 10;
@@ -67,6 +71,7 @@ GameStartScene = enchant.Class.create(enchant.Scene, {
       subTitle.y = 10;
       subTitle.font = '16px メイリオ';
       this.addChild(subTitle)
+	  /* TODO タイトルバーを生成したら 削除 End */
 
       /* ボタンを生成して並べる */
       btnList = new Array();
@@ -129,42 +134,39 @@ function createButton(stage, x ,y){
   stage.addChild(btn);
   btnList[x + y * BTN_COL] = btn;
   btn.addEventListener(Event.TOUCH_START, function(e) {
+
     //２枚めくって３０フレームの間排他
     if (checkFlg == true) return;
+
     //表なら関数を抜ける
     if (btn.image == core.assets[BTN_FRONT_IMG]){
         reverseFlg = true;
         return;
     } 
+
     //音
     if( btnSound ) {
         btnSound.stop();
     }
     btnSound = core.assets["audio/sound" + btnId + ".mp3"].clone();	//音声ファイルを設定
     btnSound.play();
+
     //一致判定
     btn.image = core.assets[BTN_FRONT_IMG];
-    if (firstClickFlg == true) {
+    if (firstClickFlg) {
         firstClickBtn = btn;
         firstBtnId = btnId;
     }
-  });
-  btn.addEventListener(Event.TOUCH_END, function(e) {
-    //２枚めくって３０フレームの間排他
-    if (checkFlg == true) return;
 
-    //表なら関数を抜ける
-    if (reverseFlg == true){
-        reverseFlg = false;
-        return;
-    } 
-    if (firstClickFlg == true) {
+    //一枚目の場合
+    if (firstClickFlg) {
        firstClickFlg = false;
        //カードの動き
        this.tl.rotateTo(15, 5).and().scaleTo(1.2, 5)
        .rotateTo(-15, 5).rotateTo(15, 5).rotateTo(-15, 5)
        .rotateTo(0, 5).and().scaleTo(1, 5);
     }else if (firstBtnId == btnId){
+       //二枚目かつ揃わなかった場合
        firstClickFlg = true;
        checkFlg = true;
        matchCnt += 1;
@@ -185,8 +187,9 @@ function createButton(stage, x ,y){
               .then(function(){
                                  btnSound.stop();
                                  checkFlg = false;
-                               });  
+                               });
     }else{
+       //二枚目かつ揃った場合
        firstClickFlg = true;
        checkFlg = true;
        //カードの動き
