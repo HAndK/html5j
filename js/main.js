@@ -34,7 +34,7 @@ var btnSound = null;
 window.onload = function(){
   core = new Core(CORE_WIDTH, CORE_HEIGHT);
   core.fps = 15;
-  core.preload(BTN_FRONT_IMG, BTN_BACK_IMG, BACKGROUND_IMG, BEAR_IMG, "audio/hanabi.mp3", "audio/correct.mp3", "audio/incorrect.mp3", "audio/sound1.mp3", "audio/sound2.mp3", "audio/sound3.mp3", 
+  core.preload(BTN_FRONT_IMG, BTN_BACK_IMG, BACKGROUND_IMG, BEAR_IMG, "audio/hanabi.mp3", "audio/correct.mp3", "audio/sound1.mp3", "audio/sound2.mp3", "audio/sound3.mp3", 
                "audio/sound4.mp3", "audio/sound5.mp3", "audio/sound6.mp3", "audio/sound7.mp3", "audio/sound8.mp3", "audio/sound9.mp3", "audio/sound10.mp3", "audio/sound11.mp3", "audio/sound12.mp3");
 
   core.onload = function(){
@@ -192,8 +192,6 @@ function createButton(stage, x ,y){
                                });
     }else{
        //二枚目かつ揃わなかった場合
-       var incorrectSound = core.assets["audio/incorrect.mp3"].clone();
-       incorrectSound.play();
        firstClickFlg = true;
        checkFlg = true;
        //カードの動き
