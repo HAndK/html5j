@@ -5,6 +5,7 @@ const BTN_FRONT_IMG = "img/cardFront.png";  // ボタン表画像
 const BTN_BACK_IMG = "img/cardBack.png";    // ボタン裏画像
 const BACKGROUND_IMG  = "img/mainBg.png"; // 背景画像
 const BEAR_IMG = "img/bear.png";            // クマ画像
+const TITLE_IMG = "img/title.png"          //タイトル画像
 
 //--------------------定数-----------------------------
 const CORE_WIDTH = 640;   // 画面横サイズ
@@ -14,6 +15,7 @@ const BTN_HEIGHT  = 100;  // ボタン画像縦サイズ
 const BEAR_WIDTH = 32;    // クマの画像横サイズ
 const BEAR_HEIGHT = 32;   // クマの画像縦サイズ
 const SOUNT_NUM = 12;     // 音源の数
+const TITLE_HEIGHT = 30;  // タイトル縦サイズ
 
 const BTN_COL    = 4;     // 横に配置する数
 const BTN_ROW    = 3;     // 縦に配置する数
@@ -34,7 +36,7 @@ var btnSound = null;
 window.onload = function(){
   core = new Core(CORE_WIDTH, CORE_HEIGHT);
   core.fps = 15;
-  core.preload(BTN_FRONT_IMG, BTN_BACK_IMG, BACKGROUND_IMG, BEAR_IMG, "audio/hanabi.mp3", "audio/correct.mp3", "audio/sound1.mp3", "audio/sound2.mp3", "audio/sound3.mp3", 
+  core.preload(BTN_FRONT_IMG, BTN_BACK_IMG, BACKGROUND_IMG, BEAR_IMG, TITLE_IMG, "audio/hanabi.mp3", "audio/correct.mp3", "audio/sound1.mp3", "audio/sound2.mp3", "audio/sound3.mp3",
                "audio/sound4.mp3", "audio/sound5.mp3", "audio/sound6.mp3", "audio/sound7.mp3", "audio/sound8.mp3", "audio/sound9.mp3", "audio/sound10.mp3", "audio/sound11.mp3", "audio/sound12.mp3");
 
   core.onload = function(){
@@ -49,29 +51,23 @@ GameStartScene = enchant.Class.create(enchant.Scene, {
   initialize: function () {
       Scene.call(this);
 
-      /* TODO ここにタイトルバーを生成して画面に追加 */
+      /* TODO ここにタイトルバーの生成 */
+      var title = new Sprite(CORE_WIDTH, TITLE_HEIGHT);
+      title.image = core.assets['img/title.png'];
+      this.addChild(title)
 
       /* 背景の生成 */
       var backGround = new Sprite(CORE_WIDTH, CORE_HEIGHT);
       backGround.image = core.assets[BACKGROUND_IMG];
       backGround.y = 30;
       this.addChild(backGround);
-      
-      /* TODO タイトルバーを生成したら 削除 start */
+
       /* タイトルの生成 */
-      var title = new Label('音合わせ');
+      var title = new Label('おとあわせ ♫');
       title.x = 10;
       title.y = 5;
       title.font = "bold 20px メイリオ";
       this.addChild(title);
-      
-      /* サブタイトルラベル設定 */
-      var subTitle = new Label('～音で合わせる神経衰弱～'); 
-      subTitle.x = 100;
-      subTitle.y = 10;
-      subTitle.font = '16px メイリオ';
-      this.addChild(subTitle)
-	  /* TODO タイトルバーを生成したら 削除 End */
 
       /* ボタンを生成して並べる */
       btnList = new Array();
@@ -92,7 +88,7 @@ GameStartScene = enchant.Class.create(enchant.Scene, {
       bear.addEventListener('enterframe', function() {
           /* Bearの移動先のX座標を取得 */
           this.x = getMoveBearX(this.x, direct);
-          
+
           /* 条件に応じてFrameを変更 */
           if(core.frame % 4 == 0){
               if(direct == "right") {
@@ -101,7 +97,7 @@ GameStartScene = enchant.Class.create(enchant.Scene, {
                   this.frame = core.frame % 3 + 15;
               }
           }
-          
+
           /* Bearの進む方向を変更 */
           if (this.x > CORE_WIDTH - BEAR_WIDTH) {
               this.x = CORE_WIDTH - BEAR_WIDTH;
@@ -142,7 +138,7 @@ function createButton(stage, x ,y){
     if (btn.image == core.assets[BTN_FRONT_IMG]){
         reverseFlg = true;
         return;
-    } 
+    }
 
     //音
     if( btnSound ) {
@@ -232,7 +228,7 @@ function getMoveBearX(x, direct){
 function arrayShuffle(list) {
     var d, c
     var b = list.length;
-    
+
     while(b) {
         c = Math.floor(Math.random() * b);
         d = list[--b];
@@ -245,9 +241,9 @@ function arrayShuffle(list) {
 //配列作成
 function createRandomArray(soundNum) {
     var arr = [];
-    for(var i=0; i < (soundNum / 2); i++) { 
+    for(var i=0; i < (soundNum / 2); i++) {
         do {
-            var randNum = Math.floor(Math.random() * soundNum) + 1; 
+            var randNum = Math.floor(Math.random() * soundNum) + 1;
         } while(arr.indexOf(randNum) != -1)
         arr[i] = randNum;
     }
