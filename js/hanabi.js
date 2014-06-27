@@ -63,13 +63,13 @@ GameEndingScene = enchant.Class.create(enchant.Scene, {
       for(var i = 0; i < 3; i++) {
           hanabiID[i] = [];
           for(var j = 0; j < 3; j++) {
-              var surface = new Surface(10, 10);
+              var surface = new Surface(20, 20);
               surface.context.beginPath();
-              var grap = surface.context.createRadialGradient(2, 2, 1, 3, 3, 3);
+              var grap = surface.context.createRadialGradient(3, 3, 2, 6, 6, 6);
               grap.addColorStop(0, "#FFF");
               grap.addColorStop(1, hanabiC[i][j]);
               surface.context.fillStyle = grap;
-              surface.context.arc(3, 3, 3, 0, Math.PI*2);
+              surface.context.arc(10, 6, 6, 0, Math.PI*2);
               surface.context.fill();
               hanabiID[i][j] = surface;
           }
@@ -78,7 +78,7 @@ GameEndingScene = enchant.Class.create(enchant.Scene, {
       //花火のクラス作成
       var Hanabi = Class.create(Sprite, {
           initialize: function(x, y, vx, vy, id1, id2) {
-              Sprite.call(this, 10, 10);
+              Sprite.call(this, 20, 20);
               this.x = x;    //初期表示位置X
               this.y = y;    //初期表示位置Y
 
@@ -103,12 +103,12 @@ GameEndingScene = enchant.Class.create(enchant.Scene, {
       function Bom(x, y, id1) {
           //花火っぽく整形
           for(var i = 0; i < 30; i++) {
-              new Hanabi(x, y, (sin(i*12) * 50), (cos(i*12) * 50), id1, 0);
+              new Hanabi(x, y, (sin(i*12) * 80), (cos(i*12) * 80), id1, 0);
               if(i>=10) { 
-                  new Hanabi(x, y, (sin(i*18) * 40), (cos(i*18) * 40), id1, 1);
+                  new Hanabi(x, y, (sin(i*18) * 60), (cos(i*18) * 60), id1, 1);
               }
               if(i>=15) { 
-                  new Hanabi(x, y, (sin(i*24) * 30), (cos(i*24) * 30), id1, 1);
+                  new Hanabi(x, y, (sin(i*24) * 40), (cos(i*24) * 40), id1, 1);
               }
               if(i>=20) { 
                   new Hanabi(x, y, (sin(i*36) * 20), (cos(i*36) * 20), id1, 2);
