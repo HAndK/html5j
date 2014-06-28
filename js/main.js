@@ -3,9 +3,9 @@ enchant();
 //--------------------画像情報-----------------------------
 const BTN_FRONT_IMG = "img/cardFront.png";  // ボタン表画像
 const BTN_BACK_IMG = "img/cardBack.png";    // ボタン裏画像
-const BACKGROUND_IMG  = "img/mainBg.png"; // 背景画像
+const BACKGROUND_IMG  = "img/mainBg.png";   // 背景画像
 const BEAR_IMG = "img/bear.png";            // クマ画像
-const TITLE_IMG = "img/title.png"          //タイトル画像
+const TITLE_IMG = "img/title.png"           //タイトル画像
 
 //--------------------定数-----------------------------
 const CORE_WIDTH = 640;   // 画面横サイズ
@@ -51,23 +51,23 @@ GameStartScene = enchant.Class.create(enchant.Scene, {
   initialize: function () {
       Scene.call(this);
 
-      /* TODO ここにタイトルバーの生成 */
-      var title = new Sprite(CORE_WIDTH, TITLE_HEIGHT);
-      title.image = core.assets['img/title.png'];
-      this.addChild(title)
+      /* タイトルバーの生成 */
+      var titleBar = new Sprite(CORE_WIDTH, TITLE_HEIGHT);
+      titleBar.image = core.assets['img/title.png'];
+      this.addChild(titleBar)
+
+      /* タイトルの生成 */
+      var title = new Label('おとあわせ♪');
+      title.x = (core.width - title._boundWidth) / 2;
+      title.y = 5;
+      title.font = "bold 20px メイリオ";
+      this.addChild(title);
 
       /* 背景の生成 */
       var backGround = new Sprite(CORE_WIDTH, CORE_HEIGHT);
       backGround.image = core.assets[BACKGROUND_IMG];
       backGround.y = 30;
       this.addChild(backGround);
-
-      /* タイトルの生成 */
-      var title = new Label('おとあわせ ♫');
-      title.x = 10;
-      title.y = 5;
-      title.font = "bold 20px メイリオ";
-      this.addChild(title);
 
       /* ボタンを生成して並べる */
       btnList = new Array();
@@ -144,7 +144,7 @@ function createButton(stage, x ,y){
     if( btnSound ) {
         btnSound.stop();
     }
-    btnSound = core.assets["audio/sound" + btnId + ".mp3"].clone();	//音声ファイルを設定
+    btnSound = core.assets["audio/sound" + btnId + ".mp3"].clone(); //音声ファイルを設定
     btnSound.play();
 
     //一致判定
