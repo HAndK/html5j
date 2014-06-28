@@ -84,6 +84,8 @@ GameStartScene = enchant.Class.create(enchant.Scene, {
       bear.y = CORE_HEIGHT - BEAR_HEIGHT;
       bear.frame = 1;
       var direct = "right";
+      var bearFrameNum = 0;
+      var randNum = 0;
 
       bear.addEventListener('enterframe', function() {
           /* Bearの移動先のX座標を取得 */
@@ -92,9 +94,9 @@ GameStartScene = enchant.Class.create(enchant.Scene, {
           /* 条件に応じてFrameを変更 */
           if(core.frame % 4 == 0){
               if(direct == "right") {
-                  this.frame = core.frame % 3;
+                  this.frame = core.frame % 3 + (bearFrameNum * 5);
               } else if(direct == "left"){
-                  this.frame = core.frame % 3 + 15;
+                  this.frame = core.frame % 3 + ((bearFrameNum * 5) + 15);
               }
           }
 
@@ -103,10 +105,19 @@ GameStartScene = enchant.Class.create(enchant.Scene, {
               this.x = CORE_WIDTH - BEAR_WIDTH;
               this.frame = 16;
               direct = "left";
+              
+              do {
+                   randNum = Math.floor(Math.random() * 3); 
+              } while(randNum == bearFrameNum)
+              bearFrameNum = randNum;
           } else if(this.x < 0){
               this.x = 0;
               this.frame = 1;
               direct = "right";
+              do {
+                   randNum = Math.floor(Math.random() * 3); 
+              } while(randNum == bearFrameNum)
+              bearFrameNum = randNum;
           }
       });
       this.addChild(bear);
