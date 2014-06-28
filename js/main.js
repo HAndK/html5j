@@ -32,11 +32,12 @@ var checkFlg = false      // 排他用フラグ
 btnvalue = createRandomArray(SOUNT_NUM);
 btnvalue = arrayShuffle(btnvalue);
 var btnSound = null;
+var applauseSound = null;
 
 window.onload = function(){
   core = new Core(CORE_WIDTH, CORE_HEIGHT);
   core.fps = 15;
-  core.preload(BTN_FRONT_IMG, BTN_BACK_IMG, BACKGROUND_IMG, BEAR_IMG, TITLE_IMG, "audio/hanabi.mp3", "audio/correct.mp3", "audio/sound1.mp3", "audio/sound2.mp3", "audio/sound3.mp3",
+  core.preload(BTN_FRONT_IMG, BTN_BACK_IMG, BACKGROUND_IMG, BEAR_IMG, TITLE_IMG, "audio/hanabi.mp3", "audio/applause.mp3", "audio/correct.mp3", "audio/sound1.mp3", "audio/sound2.mp3", "audio/sound3.mp3",
                "audio/sound4.mp3", "audio/sound5.mp3", "audio/sound6.mp3", "audio/sound7.mp3", "audio/sound8.mp3", "audio/sound9.mp3", "audio/sound10.mp3", "audio/sound11.mp3", "audio/sound12.mp3");
 
   core.onload = function(){
@@ -120,6 +121,16 @@ GameStartScene = enchant.Class.create(enchant.Scene, {
               bearFrameNum = randNum;
           }
       });
+      
+      bear.addEventListener('touchstart', function() {
+          if( applauseSound ) {
+            applauseSound.stop();
+          }
+          /* 拍手音を鳴らす */
+          applauseSound = core.assets["audio/applause.mp3"].clone(); //音声ファイルを設定
+          applauseSound.play();
+      });
+      
       this.addChild(bear);
   }
 });
@@ -141,6 +152,10 @@ function createButton(stage, x ,y){
   stage.addChild(btn);
   btnList[x + y * BTN_COL] = btn;
   btn.addEventListener(Event.TOUCH_START, function(e) {
+
+    if( applauseSound ) {
+            applauseSound.stop();
+    }
 
     //２枚めくって３０フレームの間排他
     if (checkFlg == true) return;
